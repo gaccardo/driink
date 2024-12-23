@@ -954,6 +954,18 @@ cryptography = ">=2.0"
 jeepney = ">=0.6"
 
 [[package]]
+name = "terminaltables"
+version = "3.1.10"
+description = "Generate simple tables in terminals from a nested list of strings."
+category = "main"
+optional = false
+python-versions = ">=2.6"
+files = [
+    {file = "terminaltables-3.1.10-py2.py3-none-any.whl", hash = "sha256:e4fdc4179c9e4aab5f674d80f09d76fa436b96fdc698a8505e0a36bf0804a874"},
+    {file = "terminaltables-3.1.10.tar.gz", hash = "sha256:ba6eca5cb5ba02bba4c9f4f985af80c54ec3dccf94cfcd190154386255e47543"},
+]
+
+[[package]]
 name = "twine"
 version = "6.0.1"
 description = "Collection of utilities for publishing packages on PyPI"
@@ -1035,4 +1047,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "60b598be2c0ffc0a47832597d6cd7f3e1b51fedb8fbbf00d5584bd84aeb8b4d3"
+content-hash = "9a4cdd6ad1f292437db869ea06302567064dfb5a791f5749be2e01bf96dea2d1"

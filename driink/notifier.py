@@ -1,14 +1,13 @@
 import notify2
-from settings import settings
+from dynaconf import settings
 
-print(settings.get("NOTIFICATION_TIMEOUT"))
 
 def notify(message):
     # Initialize the notification system
     notify2.init("Water Tracker")
 
     # Create a notification object
-    n = notify2.Notification("Driink - Stay Hydrated!", "Time to drink some water.")
+    n = notify2.Notification("Driink - Stay Hydrated!", message)
 
     # Set urgency level (optional)
     n.set_urgency(notify2.URGENCY_NORMAL)
@@ -18,7 +17,3 @@ def notify(message):
 
     # Show the notification
     n.show()
-
-
-#if __name__ == "__main__":
-#    notify("aaa")
