@@ -1,1 +1,2 @@
-print("driink")
+def main():
+    print("driink")
