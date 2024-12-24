@@ -58,6 +58,8 @@ def validate():
     if daily_goal <= 0:
         ok = False
 
+
+
     return ok
 
 

@@ -1,5 +1,4 @@
 import click
-from dynaconf import settings
 
 from driink.notifier import notify
 import driink.config as u_config

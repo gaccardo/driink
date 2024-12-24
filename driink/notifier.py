@@ -1,8 +1,12 @@
 import notify2
-from dynaconf import settings
+
+from driink import config
 
 
 def notify(message):
+    # configuration
+    conf = config.load_user_config()
+
     # Initialize the notification system
     notify2.init("Water Tracker")
 
@@ -13,7 +17,7 @@ def notify(message):
     n.set_urgency(notify2.URGENCY_NORMAL)
 
     # Set timeout in milliseconds (optional)
-    n.set_timeout(settings.NOTIFICATION_TIMEOUT)
+    n.set_timeout(int(conf.get('driink', 'notifications_timeout')))
 
     # Show the notification
     n.show()
