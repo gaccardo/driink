@@ -1,6 +1,7 @@
 import click
 
 from driink.notifier import notify
+from driink.migrations import ensure_migrations
 import driink.config as u_config
 
 
@@ -50,9 +51,9 @@ def config(key, value):
 
 
 def main():
+    ensure_migrations()
     cli()
 
 
 if __name__ == "__main__":
-
     cli()
