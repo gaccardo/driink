@@ -1,7 +1,10 @@
 import click
+from datetime import datetime, date
 
 from driink.notifier import notify
 from driink.migrations import ensure_migrations
+from driink import db
+from driink.visualizations import display_progress
 import driink.config as u_config
 
 
@@ -25,10 +28,41 @@ def drank(amount):
         print("the configuration is not valid")
         return
 
-    # add_water(amount)
+    db.log_drink(amount)
     msg = f"Logged {amount}ml of water."
     click.echo(msg)
     notify(msg)
+
+
+# 'drank' Command
+@cli.command()
+def progress():
+    """Show progress"""
+    if not u_config.validate():
+        print("the configuration is not valid")
+        return
+
+    # Start of today
+    start_of_today = datetime.combine(date.today(), datetime.min.time())
+
+    # End of today
+    end_of_today = datetime.combine(date.today(), datetime.max.time())
+
+    # Get water consumption from today
+    drink_registry = db.get_water_log(start_of_today, end_of_today)
+    total = 0
+    for record in drink_registry:
+        total += record.amount
+
+    print(f"Today you've drank: {total} ml")
+    conf = u_config.load_user_config()
+    daily_goal = int(conf.get('driink', 'daily_goal'))
+    percentage = float(total)*100/float(daily_goal)
+    print("Progress")
+    display_progress(percentage, total, daily_goal)
+    notify(f"Today you've drank: {total} ml of {daily_goal} ml"
+           f" [{percentage:.2f}%]"
+    )
 
 
 # 'config' Command

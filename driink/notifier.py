@@ -7,6 +7,10 @@ def notify(message):
     # configuration
     conf = config.load_user_config()
 
+    # don't show notifications if we disabled them
+    if not bool(conf.get('driink', 'notifications_enabled')):
+        return
+
     # Initialize the notification system
     notify2.init("Water Tracker")
 

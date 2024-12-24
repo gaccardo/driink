@@ -7,10 +7,14 @@ from alembic import command
 
 
 def get_alembic_config():
-    """Prepare the Alembic configuration with dynamic database URL."""
+    """Prepare the Alembic configuration with dynamic paths."""
     db_path = os.path.expanduser("~/.local/share/driink/driink.db")
-    alembic_cfg = Config("driink/alembic.ini")
+    script_location = os.path.join(os.path.dirname(__file__), "alembic")
+    config_path = os.path.join(os.path.dirname(__file__), "alembic.ini")
+
+    alembic_cfg = Config(config_path)
     alembic_cfg.set_main_option("sqlalchemy.url", f"sqlite:///{db_path}")
+    alembic_cfg.set_main_option("script_location", script_location)  # Set absolute path to scripts
     return alembic_cfg
 
 
