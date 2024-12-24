@@ -1,8 +1,8 @@
 import click
 from dynaconf import settings
 
-import notifier
-import config as u_config
+from driink.notifier import notify
+import driink.config as u_config
 
 
 user_config = u_config.load_user_config()
@@ -28,7 +28,7 @@ def drank(amount):
     # add_water(amount)
     msg = f"Logged {amount}ml of water."
     click.echo(msg)
-    notifier.notify(msg)
+    notify(msg)
 
 
 # 'config' Command
@@ -47,7 +47,7 @@ def config(key, value):
         message = "error changing the settings"
 
     click.echo(message)
-    notifier.notify(message)
+    notify(message)
 
 
 def main():
