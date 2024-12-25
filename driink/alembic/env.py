@@ -1,4 +1,5 @@
 import os
+import shutil
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
@@ -11,10 +12,20 @@ from driink.models import Base
 # access to the values within the .ini file in use.
 config = context.config
 
-db_path = os.path.expanduser('~/.local/share/driink')
-if not os.path.exists(db_path):
-    os.mkdir(db_path)
+# ensure share folders exists
+folders = ['~/.local/share/driink', '~/.local/share/driink/resources']
+for folder in folders:
+    db_path = os.path.expanduser(folder)
+    if not os.path.exists(db_path):
+        os.mkdir(db_path)
+# 
+# # copy files
+# shutil.copyfile(
+#     'driink/gui-resources/water.png',
+#     os.path.expanduser('~/.local/share/driink/resources/water.png')
+# )
 
+db_path = os.path.expanduser('~/.local/share/driink')
 config.set_main_option('sqlalchemy.url', f'sqlite:///{db_path}/driink.db')
 
 # Interpret the config file for Python logging.

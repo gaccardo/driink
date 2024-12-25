@@ -17,6 +17,7 @@ terminaltables = "^3.1.10"
 sqlalchemy = "^2.0.36"
 alembic = "^1.14.0"
 tqdm = "^4.67.1"
+pygobject = "^3.50.0"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.13.2"
@@ -31,6 +32,7 @@ ipython = "^8.31.0"
 [tool.poetry.scripts]
 # Entry points for console scripts
 driink = "driink.cli:main"
+driink-applet = "driink.applet:main"
 
 [build-system]
 requires = ["poetry-core"]
