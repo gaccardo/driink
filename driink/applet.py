@@ -3,7 +3,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
 from gi.repository import Gtk, AppIndicator3, Notify, GLib
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 import asyncio
 
@@ -43,7 +43,15 @@ class DriinkApplet:
         """Schedule hourly notifications."""
         while True:
             await asyncio.sleep(3600)  # Wait for one hour
-            GLib.idle_add(self.show_notification)
+
+            # check if we had modifications during the past hour
+            now = datetime.now()
+            drink_registry = db.get_water_log(
+                now,
+                now + timedelta(hours=1)
+            )
+            if len(drink_registry) == 0:
+                GLib.idle_add(self.show_notification)
 
     def build_menu(self):
         menu = Gtk.Menu()
@@ -183,12 +191,11 @@ def main():
 
     loop.run_forever()
 
-    #Gtk.main()
-
 
 async def run_gtk_main():
     """Run the GTK main loop in an asyncio-compatible way."""
     await asyncio.to_thread(Gtk.main)
+
 
 if __name__ == "__main__":
     main()
