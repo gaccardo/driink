@@ -2,8 +2,10 @@ import os
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
-from gi.repository import Gtk, AppIndicator3
+from gi.repository import Gtk, AppIndicator3, Notify, GLib
 from datetime import datetime, date
+
+import asyncio
 
 from driink.notifier import notify
 from driink import db
@@ -14,7 +16,8 @@ from driink.visualizations import display_progress
 
 class DriinkApplet:
 
-    def __init__(self):
+    def __init__(self, loop):
+        self.loop = loop
         self.indicator = AppIndicator3.Indicator.new(
             "driink-applet",
             os.path.expanduser("~/.local/share/driink/resources/water.png"),
@@ -22,6 +25,25 @@ class DriinkApplet:
         )
         self.indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
         self.indicator.set_menu(self.build_menu())
+
+        Notify.init("Driink")
+
+        asyncio.ensure_future(self.schedule_notifications())
+
+    def show_notification(self, _=None):
+        """Show a notification."""
+        notification = Notify.Notification.new(
+            "Driink Reminder",
+            "Time to drink some water and stay hydrated!",
+            "dialog-information",  # Icon name from the system theme
+        )
+        notification.show()
+
+    async def schedule_notifications(self):
+        """Schedule hourly notifications."""
+        while True:
+            await asyncio.sleep(3600)  # Wait for one hour
+            GLib.idle_add(self.show_notification)
 
     def build_menu(self):
         menu = Gtk.Menu()
@@ -37,18 +59,23 @@ class DriinkApplet:
 
         menu.append(log_item)
         quantities = [
+            ("50ml", 50),
             ("100ml", 100),
-            ("250ml", 250),
-            ("500ml", 500),("750ml", 750)
+            ("200ml", 200),
+            ("500ml", 500),
+            ("700ml", 700)
         ]
         for label, amount in quantities:
             quantity_item = Gtk.MenuItem(label=label)
             quantity_item.connect("activate", self.log_water, amount)
             log_menu.append(quantity_item)
 
-        settings_item = Gtk.MenuItem(label="Settings")
-        settings_item.connect("activate", self.open_settings)
-        menu.append(settings_item)
+        # settings_item = Gtk.MenuItem(label="Settings")
+        # settings_item.connect("activate", self.open_settings)
+        # menu.append(settings_item)
+
+        separator1 = Gtk.SeparatorMenuItem()
+        menu.append(separator1)
 
         about_item = Gtk.MenuItem(label="About")
         about_item.connect("activate", self.show_about)
@@ -62,13 +89,14 @@ class DriinkApplet:
         menu.show_all()
         return menu
 
-    def log_water(self, _):
-        db.log_drink(100)
-        msg = f"Logged 100ml of water."
+    def log_water(self, menu_item, amount):
+        db.log_drink(amount)
+        msg = f"Logged {amount} ml of water."
         notify(msg)
 
     def quit(self, _):
-        Gtk.main_quit()
+        Gtk.main_quit()  # Stop the GTK main loop
+        self.loop.stop()  # Stop the asyncio event loop
 
     def display_progress_bar(self, total, daily_goal, percentage):
         """Display the progress in a GTK window with a progress bar."""
@@ -148,8 +176,19 @@ class DriinkApplet:
 
 
 def main():
-    applet = DriinkApplet()
-    Gtk.main()
+    loop = asyncio.get_event_loop()
+    loop.create_task(run_gtk_main())
+
+    applet = DriinkApplet(loop)
+
+    loop.run_forever()
+
+    #Gtk.main()
+
+
+async def run_gtk_main():
+    """Run the GTK main loop in an asyncio-compatible way."""
+    await asyncio.to_thread(Gtk.main)
 
 if __name__ == "__main__":
     main()
