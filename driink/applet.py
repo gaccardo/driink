@@ -6,6 +6,7 @@ from gi.repository import Gtk, AppIndicator3
 
 from driink.notifier import notify
 from driink import db
+from driink import __version__
 
 
 class DriinkApplet:
@@ -70,7 +71,18 @@ class DriinkApplet:
         print("Open settings clicked!")
 
     def show_about(self, _):
-        print("Show about clicked!")
+        """Show the About dialog."""
+        dialog = Gtk.AboutDialog()
+        dialog.set_program_name("Driink - Stay Hydrated")
+        dialog.set_version(__version__)
+        dialog.set_comments("A simple applet to track water consumption and stay hydrated.")
+        dialog.set_website("https://github.com/gaccardo/driink")
+        dialog.set_authors(["Guido Accardo"])
+        dialog.set_logo_icon_name("dialog-information")  # Use a system icon or set a custom logo
+
+        # Show the dialog
+        dialog.run()
+        dialog.destroy()
 
     def show_menu(self, menu):
         """Show the given menu."""
