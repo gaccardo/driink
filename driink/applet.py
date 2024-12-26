@@ -13,21 +13,42 @@ class DriinkApplet:
     def __init__(self):
         self.indicator = AppIndicator3.Indicator.new(
             "driink-applet",
-            "dialog-information",
+            os.path.expanduser("~/.local/share/driink/resources/water.png"),
             AppIndicator3.IndicatorCategory.APPLICATION_STATUS,
         )
-        resources_path = os.path.expanduser('~/.local/share/driink/resources')
-        self.indicator.set_icon(os.path.join(resources_path, "water.png"))
         self.indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
         self.indicator.set_menu(self.build_menu())
 
     def build_menu(self):
         menu = Gtk.Menu()
 
+        progress_item = Gtk.MenuItem(label="Progress")
+        # progress_item.connect("activate", self.open_settings)
+        menu.append(progress_item)
+
         # Menu item to log water consumption
-        log_item = Gtk.MenuItem(label="Drink 100 ml")
-        log_item.connect("activate", self.log_water)
+        log_menu = Gtk.Menu()
+        log_item = Gtk.MenuItem(label="Log ...")
+        log_item.set_submenu(log_menu)
+
         menu.append(log_item)
+        quantities = [
+            ("100ml", 100),
+            ("250ml", 250),
+            ("500ml", 500),("750ml", 750)
+        ]
+        for label, amount in quantities:
+            quantity_item = Gtk.MenuItem(label=label)
+            quantity_item.connect("activate", self.log_water, amount)
+            log_menu.append(quantity_item)
+
+        settings_item = Gtk.MenuItem(label="Settings")
+        settings_item.connect("activate", self.open_settings)
+        menu.append(settings_item)
+
+        about_item = Gtk.MenuItem(label="About")
+        about_item.connect("activate", self.show_about)
+        menu.append(about_item)
 
         # Menu item to quit the app
         quit_item = Gtk.MenuItem(label="Quit")
@@ -44,6 +65,17 @@ class DriinkApplet:
 
     def quit(self, _):
         Gtk.main_quit()
+
+    def open_settings(self, _):
+        print("Open settings clicked!")
+
+    def show_about(self, _):
+        print("Show about clicked!")
+
+    def show_menu(self, menu):
+        """Show the given menu."""
+        menu.show_all()
+        menu.popup(None, None, None, None, Gdk.CURRENT_TIME, 0)
 
 
 def main():
