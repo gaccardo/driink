@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "driink"
-version = "0.0.1-dev1"
+version = "0.0.1-dev2"
 description = "A lightweight command-line tool to track daily water consumption and send reminders to stay hydrated"
 authors = ["Guido Accardo <gaccardo@gmail.com>"]
 license = "GNU GENERAL PUBLIC LICENSE Version 3"

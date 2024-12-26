@@ -6,14 +6,14 @@ import asyncio
 from datetime import date, datetime, timedelta
 
 from gi.repository import AppIndicator3, GLib, Gtk, Notify
+# gi.require_version('Gtk', '3.0')
+# gi.require_version('AppIndicator3', '0.1')
 
 import driink.config as u_config
 from driink import __version__, db
 from driink.notifier import notify
 
 
-gi.require_version('Gtk', '3.0')
-gi.require_version('AppIndicator3', '0.1')
 
 
 class DriinkApplet:
