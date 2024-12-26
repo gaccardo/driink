@@ -1,8 +1,9 @@
 import os
-from sqlalchemy import Column, Integer, String, DateTime, create_engine
+from datetime import datetime
+
+from sqlalchemy import Column, DateTime, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from datetime import datetime
 
 Base = declarative_base()
 

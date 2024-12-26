@@ -1,5 +1,6 @@
-from driink.models import Session, WaterLog
 from sqlalchemy import and_
+
+from driink.models import Session, WaterLog
 
 
 def get_water_log(start=None, end=None):

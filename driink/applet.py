@@ -1,16 +1,17 @@
 import os
+
 import gi
+
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
-from gi.repository import Gtk, AppIndicator3, Notify, GLib
-from datetime import datetime, date, timedelta
-
 import asyncio
+from datetime import date, datetime, timedelta
 
-from driink.notifier import notify
-from driink import db
-from driink import __version__
+from gi.repository import AppIndicator3, GLib, Gtk, Notify
+
 import driink.config as u_config
+from driink import __version__, db
+from driink.notifier import notify
 from driink.visualizations import display_progress
 
 

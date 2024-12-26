@@ -1,12 +1,12 @@
+from datetime import date, datetime
+
 import click
-from datetime import datetime, date
 
-from driink.notifier import notify
-from driink.migrations import ensure_migrations
-from driink import db
-from driink.visualizations import display_progress
 import driink.config as u_config
-
+from driink import db
+from driink.migrations import ensure_migrations
+from driink.notifier import notify
+from driink.visualizations import display_progress
 
 user_config = u_config.load_user_config()
 
