@@ -21,7 +21,12 @@ def cli():
 
 # 'drank' Command
 @cli.command()
-@click.option("--amount", required=True, type=int, help="Amount of water in ml to log.")
+@click.option(
+    "--amount",
+    required=True,
+    type=int,
+    help="Amount of water in ml to log."
+)
 def drank(amount):
     """Log the amount of water you drank."""
     if not u_config.validate():
@@ -60,8 +65,9 @@ def progress():
     percentage = float(total)*100/float(daily_goal)
     print("Progress")
     display_progress(percentage, total, daily_goal)
-    notify(f"Today you've drank: {total} ml of {daily_goal} ml"
-           f" [{percentage:.2f}%]"
+    notify(
+        f"Today you've drank: {total} ml of {daily_goal} ml "
+        f"[{percentage:.2f}%]"
     )
 
 

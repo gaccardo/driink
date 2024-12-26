@@ -33,7 +33,7 @@ def set_config_param(name, value):
     config = load_user_config()
 
     # check if the value we want to change exists in the ini file
-    if not name in config['driink'].keys():
+    if name not in config['driink'].keys():
         return False
 
     # set new value
@@ -58,8 +58,6 @@ def validate():
     if daily_goal <= 0:
         ok = False
 
-
-
     return ok
 
 
@@ -74,4 +72,3 @@ def present_config():
 
     table = SingleTable(title="Setting", table_data=table_data)
     print(table.table)
-

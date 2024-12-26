@@ -2,8 +2,6 @@ import os
 
 import gi
 
-gi.require_version('Gtk', '3.0')
-gi.require_version('AppIndicator3', '0.1')
 import asyncio
 from datetime import date, datetime, timedelta
 
@@ -12,7 +10,10 @@ from gi.repository import AppIndicator3, GLib, Gtk, Notify
 import driink.config as u_config
 from driink import __version__, db
 from driink.notifier import notify
-from driink.visualizations import display_progress
+
+
+gi.require_version('Gtk', '3.0')
+gi.require_version('AppIndicator3', '0.1')
 
 
 class DriinkApplet:
@@ -130,7 +131,7 @@ class DriinkApplet:
 
         # Create a progress bar
         progress_bar = Gtk.ProgressBar()
-        progress_bar.set_fraction(percentage / 100)  # Fraction must be between 0 and 1
+        progress_bar.set_fraction(percentage / 100)
         progress_bar.set_text(f"{total} ml / {daily_goal} ml")
         progress_bar.set_show_text(True)
         vbox.pack_start(progress_bar, False, False, 0)
@@ -169,10 +170,11 @@ class DriinkApplet:
         dialog = Gtk.AboutDialog()
         dialog.set_program_name("Driink - Stay Hydrated")
         dialog.set_version(__version__)
-        dialog.set_comments("A simple applet to track water consumption and stay hydrated.")
+        dialog.set_comments("A simple applet to track water consumption and "
+                            "stay hydrated.")
         dialog.set_website("https://github.com/gaccardo/driink")
         dialog.set_authors(["Guido Accardo"])
-        dialog.set_logo_icon_name("dialog-information")  # Use a system icon or set a custom logo
+        dialog.set_logo_icon_name("dialog-information")
 
         # Show the dialog
         dialog.run()
@@ -181,14 +183,14 @@ class DriinkApplet:
     def show_menu(self, menu):
         """Show the given menu."""
         menu.show_all()
-        menu.popup(None, None, None, None, Gdk.CURRENT_TIME, 0)
+        menu.popup(None, None, None, None, Gtk.CURRENT_TIME, 0)
 
 
 def main():
     loop = asyncio.get_event_loop()
     loop.create_task(run_gtk_main())
 
-    applet = DriinkApplet(loop)
+    DriinkApplet(loop)
 
     loop.run_forever()
 
@@ -200,4 +202,3 @@ async def run_gtk_main():
 
 if __name__ == "__main__":
     main()
-

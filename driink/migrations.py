@@ -16,7 +16,7 @@ def get_alembic_config():
 
     alembic_cfg = Config(config_path)
     alembic_cfg.set_main_option("sqlalchemy.url", f"sqlite:///{db_path}")
-    alembic_cfg.set_main_option("script_location", script_location)  # Set absolute path to scripts
+    alembic_cfg.set_main_option("script_location", script_location)
     return alembic_cfg
 
 
